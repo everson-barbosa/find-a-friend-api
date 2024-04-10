@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+}
+
+model PetAge {
+    id   String @id @default(uuid())
+    name String
+    Pet  Pet[]
+
+    @@map("pet_ages")
+}
+
+model PetSize {
+    id   String @id @default(uuid())
+    name String
+    Pet  Pet[]
+
+    @@map("pet_sizes")
+}
+
+model PetEnergyLevel {
+    id   String @id @default(uuid())
+    name String
+    Pet  Pet[]
+
+    @@map("pet_energy_levels")
+}
+
+model PetLevelOfIndependence {
+    id   String @id @default(uuid())
+    name String
+    Pet  Pet[]
+
+    @@map("pet_levels_of_independence")
+}
+
+model PetEnvironment {
+    id   String @id @default(uuid())
+    name String
+    Pet  Pet[]
+
+    @@map("pet_environments")
+}
+
+model Pet {
+    id                       String  @id @default(uuid())
+    name                     String
+    about                    String
+    age_id                   String?
+    size_id                  String?
+    energy_level_id          String?
+    level_of_independence_id String?
+    environment_id           String?
+    org_id                   String
+    photo_url                String?
+    requirements             String?
+
+    age                       PetAge?                 @relation(fields: [age_id], references: [id])
+    size                      PetSize?                @relation(fields: [size_id], references: [id])
+    pet_level_energy          PetEnergyLevel?         @relation(fields: [energy_level_id], references: [id])
+    pet_level_of_independence PetLevelOfIndependence? @relation(fields: [level_of_independence_id], references: [id])
+    pet_environment           PetEnvironment?         @relation(fields: [environment_id], references: [id])
+    org                       Organization            @relation(fields: [org_id], references: [id])
+
+    @@map("pets")
+}
+
+model Organization {
+    id               String @id @default(uuid())
+    accountable_name String
+    email            String
+    postal_code      String
+    city             String
+    whatsapp         String
+    password_hash    String
+
+    pets Pet[]
+
+    @@map("organizations")
+}
