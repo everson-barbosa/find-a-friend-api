@@ -1,9 +1,9 @@
-import { Pet, Prisma } from "@prisma/client";
 import { PetsRepository } from "../repositories/pets-repository";
 import { OrganizationsRepository } from "../repositories/organizations-repository";
 import { OrganizationNotFoundError } from "./errors/organization-not-found";
+import { CreatePetDTO, Pet } from "../types/Pet";
 
-interface RegisterPetUseCaseRequest extends Prisma.PetUncheckedCreateInput {}
+interface RegisterPetUseCaseRequest extends CreatePetDTO {}
 
 interface RegisterPetUseCaseResponse {
   pet: Pet;

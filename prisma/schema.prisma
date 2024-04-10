@@ -57,11 +57,11 @@ model Pet {
     id                       String  @id @default(uuid())
     name                     String
     about                    String
-    age_id                   String?
-    size_id                  String?
-    energy_level_id          String?
-    level_of_independence_id String?
-    environment_id           String?
+    age_id                   String
+    size_id                  String
+    energy_level_id          String
+    level_of_independence_id String
+    environment_id           String
     org_id                   String
     photo_url                String?
     requirements             String?

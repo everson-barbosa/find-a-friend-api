@@ -35,6 +35,7 @@ describe("Use cases: Create pet", () => {
       energy_level_id: "1",
       environment_id: "1",
       level_of_independence_id: "1",
+      photo_url: null,
       org_id: orgId,
       requirements: "Requirements",
     });
@@ -52,6 +53,7 @@ describe("Use cases: Create pet", () => {
         energy_level_id: "1",
         environment_id: "1",
         level_of_independence_id: "1",
+        photo_url: "null",
         org_id: "not-existent-id",
         requirements: "Requirements",
       })
