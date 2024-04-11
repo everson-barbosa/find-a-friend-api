@@ -20,7 +20,7 @@ describe("Use cases: Create pet", () => {
   it("should be able register a pet", async () => {
     const { id: orgId } = await organizationsRepository.create({
       accountable_name: "Everson",
-      city: "São Paulo",
+      district_id: 1,
       email: "everson@gmail.com",
       postal_code: "12345123",
       whatsapp: "11999999999",

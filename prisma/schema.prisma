@@ -13,10 +13,29 @@ datasource db {
     url      = "file:./dev.db"
 }
 
+model UF {
+    id        Int        @id
+    code      String
+    districts District[]
+
+    @@map("ufs")
+}
+
+model District {
+    id    Int    @id
+    name  String
+    uf_id Int
+
+    uf           UF             @relation(fields: [uf_id], references: [id])
+    Organization Organization[]
+
+    @@map("districts")
+}
+
 model PetAge {
     id   String @id @default(uuid())
     name String
-    Pet  Pet[]
+    pets Pet[]
 
     @@map("pet_ages")
 }
@@ -24,7 +43,7 @@ model PetAge {
 model PetSize {
     id   String @id @default(uuid())
     name String
-    Pet  Pet[]
+    pets Pet[]
 
     @@map("pet_sizes")
 }
@@ -32,7 +51,7 @@ model PetSize {
 model PetEnergyLevel {
     id   String @id @default(uuid())
     name String
-    Pet  Pet[]
+    pets Pet[]
 
     @@map("pet_energy_levels")
 }
@@ -40,7 +59,7 @@ model PetEnergyLevel {
 model PetLevelOfIndependence {
     id   String @id @default(uuid())
     name String
-    Pet  Pet[]
+    pets Pet[]
 
     @@map("pet_levels_of_independence")
 }
@@ -48,7 +67,7 @@ model PetLevelOfIndependence {
 model PetEnvironment {
     id   String @id @default(uuid())
     name String
-    Pet  Pet[]
+    pets Pet[]
 
     @@map("pet_environments")
 }
@@ -81,9 +100,11 @@ model Organization {
     accountable_name String
     email            String
     postal_code      String
-    city             String
     whatsapp         String
     password_hash    String
+    district_id      Int
+
+    district District @relation(fields: [district_id], references: [id])
 
     pets Pet[]
 

@@ -1,0 +1,13 @@
+-- CreateTable
+CREATE TABLE "ufs" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "code" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "districts" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "uf_id" INTEGER NOT NULL,
+    CONSTRAINT "districts_uf_id_fkey" FOREIGN KEY ("uf_id") REFERENCES "ufs" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

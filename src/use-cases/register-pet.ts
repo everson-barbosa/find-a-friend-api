@@ -18,7 +18,7 @@ export class RegisterPetUseCase {
   async execute(
     data: RegisterPetUseCaseRequest
   ): Promise<RegisterPetUseCaseResponse> {
-    const organization = await this.organizationsRepository.findUnique(
+    const organization = await this.organizationsRepository.findById(
       data.org_id
     );
 

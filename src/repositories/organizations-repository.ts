@@ -1,6 +1,7 @@
-import { Organization, Prisma } from "@prisma/client";
+import { CreateOrganizationDTO, Organization } from "../types/Organization";
 
 export interface OrganizationsRepository {
-  findUnique(id: string): Promise<Organization | null>;
-  create(data: Prisma.OrganizationCreateInput): Promise<Organization>;
+  findById(id: string): Promise<Organization | null>;
+  findByEmail(email: string): Promise<Organization | null>;
+  create(data: CreateOrganizationDTO): Promise<Organization>;
 }
