@@ -6,7 +6,7 @@ import { OrganizationEmailAlreadyExistsError } from "./errors/organization-email
 import { DistrictsRepository } from "../repositories/districts-repository";
 import { InMemoryDistrictsRepository } from "../repositories/in-memory/in-memory-districts-repository";
 import { DistrictNotFoundError } from "./errors/district-not-found";
-import { compare, hash } from "bcryptjs";
+import { compare } from "bcryptjs";
 
 describe("Use cases: Register organization", () => {
   let organizationsRepository: OrganizationsRepository;
