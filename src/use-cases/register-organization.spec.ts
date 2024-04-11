@@ -6,6 +6,7 @@ import { OrganizationEmailAlreadyExistsError } from "./errors/organization-email
 import { DistrictsRepository } from "../repositories/districts-repository";
 import { InMemoryDistrictsRepository } from "../repositories/in-memory/in-memory-districts-repository";
 import { DistrictNotFoundError } from "./errors/district-not-found";
+import { compare, hash } from "bcryptjs";
 
 describe("Use cases: Register organization", () => {
   let organizationsRepository: OrganizationsRepository;
@@ -34,10 +35,11 @@ describe("Use cases: Register organization", () => {
       email: "everson@gmail.com",
       postal_code: "12345123",
       whatsapp: "11999999999",
-      password_hash: "SomePassword123",
+      password: "SomePassword123",
     });
 
     expect(organization.id).toEqual(expect.any(String));
+    expect(await compare('SomePassword123', organization.password_hash)).toBeTruthy()
   });
 
   it("it should not be able to register an organization with an email that already exists", async () => {
@@ -53,7 +55,7 @@ describe("Use cases: Register organization", () => {
       email: "everson@gmail.com",
       postal_code: "12345123",
       whatsapp: "11999999999",
-      password_hash: "SomePassword123",
+      password: "SomePassword123",
     });
 
     await expect(() =>
@@ -63,7 +65,7 @@ describe("Use cases: Register organization", () => {
         email: "everson@gmail.com",
         postal_code: "12345123",
         whatsapp: "11999999999",
-        password_hash: "SomePassword123",
+        password: "SomePassword123",
       })
     ).rejects.toBeInstanceOf(OrganizationEmailAlreadyExistsError);
   });
@@ -76,7 +78,7 @@ describe("Use cases: Register organization", () => {
         email: "everson@gmail.com",
         postal_code: "12345123",
         whatsapp: "11999999999",
-        password_hash: "SomePassword123",
+        password: "SomePassword123",
       })
     ).rejects.toBeInstanceOf(DistrictNotFoundError);
   });
