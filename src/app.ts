@@ -1,7 +1,12 @@
-import fastifyMultipart from "@fastify/multipart";
 import fastify from "fastify";
+import cors from '@fastify/cors'
+import multipart from "@fastify/multipart";
 
 
 export const app = fastify();
 
-app.register(fastifyMultipart)
+app.register(cors, {
+    origin: true
+})
+
+app.register(multipart)
