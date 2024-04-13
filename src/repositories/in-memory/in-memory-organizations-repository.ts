@@ -23,6 +23,12 @@ export class InMemoryOrganizationsRepository
     return organization ?? null;
   }
 
+  async findManyByDistrictId(districtId: number): Promise<Organization[]> {
+    const organizations = await this.organizations.filter(organization => organization.district_id === districtId)
+
+    return organizations
+  }
+
   async create(data: CreateOrganizationDTO): Promise<Organization> {
     const organization = {
       ...data,

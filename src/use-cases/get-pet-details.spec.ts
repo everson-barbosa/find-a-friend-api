@@ -44,7 +44,7 @@ describe('Use cases: Get pet details', () => {
         })
     })
 
-    it('should be able to get pet details', async () => {
+    it('should not be able to get pet details when there is no one', async () => {
         const createdPet = await petsRepository.create({
             name: 'Pet name',
             about: 'About text',

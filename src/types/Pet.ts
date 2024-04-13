@@ -12,4 +12,6 @@ export interface Pet {
   requirements: string | null;
 }
 
+export type PetsFilters = Partial<Omit<Pet, 'id' | 'about' | 'requirements' | 'org_id' | 'name' | 'photo_url'>>
+
 export type CreatePetDTO = Omit<Pet, "id">;

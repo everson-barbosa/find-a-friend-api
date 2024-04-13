@@ -17,6 +17,7 @@ export class GetPetDetailsUseCase {
         if (!pet) {
             throw new ResourceNotFoundError()
         }
+        
 
         return { pet }
     }
