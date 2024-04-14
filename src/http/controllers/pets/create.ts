@@ -45,8 +45,6 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     photo,
   } = createPetRequestBodySchema.parse(request.body)
 
-  console.log(photo)
-
   const photoFolder = path.join('temp', 'uploads', 'pet', 'photo')
   const photoName = `pet-${randomUUID()}`
 
