@@ -1,34 +1,37 @@
-import { randomUUID } from "crypto";
-import { PetsRepository } from "../pets-repository";
-import { Pet, CreatePetDTO, PetsFilters } from "../../types/Pet";
+import { randomUUID } from 'crypto'
+import { PetsRepository } from '../pets-repository'
+import { Pet, CreatePetDTO, PetsFilters } from '../../types/Pet'
 
 export class InMemoryPetsRepository implements PetsRepository {
-  public pets: Pet[] = [];
+  public pets: Pet[] = []
 
   async create(data: CreatePetDTO): Promise<Pet> {
     const pet = {
       id: randomUUID(),
       ...data,
-    };
+    }
 
-    this.pets.push(pet);
+    this.pets.push(pet)
 
-    return pet;
+    return pet
   }
 
   async findById(id: string): Promise<Pet | null> {
-      const pet = this.pets.find(pet => pet.id === id)
+    const pet = this.pets.find((pet) => pet.id === id)
 
-      return pet ?? null
+    return pet ?? null
   }
 
-  async findManyByOrganizationsId(organizationsId: string[], filters: PetsFilters = {}): Promise<Pet[]> {
+  async findManyByOrganizationsId(
+    organizationsId: string[],
+    filters: PetsFilters = {},
+  ): Promise<Pet[]> {
     const filterKeys = Object.keys(filters) as (keyof PetsFilters)[]
 
-    const pets = this.pets.filter(pet => {
+    const pets = this.pets.filter((pet) => {
       let doesMatchWithFilters = true
 
-      filterKeys.forEach(filterKey => {
+      filterKeys.forEach((filterKey) => {
         if (pet[filterKey] !== filters[filterKey]) {
           doesMatchWithFilters = false
         }
@@ -37,7 +40,7 @@ export class InMemoryPetsRepository implements PetsRepository {
       if (!doesMatchWithFilters) {
         return false
       }
-      
+
       return organizationsId.includes(pet.org_id)
     })
 

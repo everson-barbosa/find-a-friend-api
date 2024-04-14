@@ -1,4 +1,10 @@
+# Módulos de dependencias das bibliotecas
 node_modules
+
 build
+
 coverage
+
 .env
+
+temp

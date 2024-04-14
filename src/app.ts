@@ -1,12 +1,14 @@
-import fastify from "fastify";
+import fastify from 'fastify'
 import cors from '@fastify/cors'
-import multipart from "@fastify/multipart";
+import multipart from '@fastify/multipart'
+import { petsRoutes } from './http/controllers/pets/routes'
 
-
-export const app = fastify();
+export const app = fastify()
 
 app.register(cors, {
-    origin: true
+  origin: true,
 })
 
 app.register(multipart)
+
+app.register(petsRoutes)

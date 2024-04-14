@@ -1,22 +1,20 @@
-import { DistrictsRepository } from "../districts-repository";
-import { CreateDistrictDTO, District } from "../../types/Districts";
+import { DistrictsRepository } from '../districts-repository'
+import { CreateDistrictDTO, District } from '../../types/Districts'
 
 export class InMemoryDistrictsRepository implements DistrictsRepository {
-  public districts: District[] = [];
+  public districts: District[] = []
 
   async create(data: CreateDistrictDTO): Promise<District> {
-    const district = { ...data, id: this.districts.length + 1 };
+    const district = { ...data, id: this.districts.length + 1 }
 
-    this.districts.push(district);
+    this.districts.push(district)
 
-    return district;
+    return district
   }
 
   async findById(id: number) {
-    const findedDistrict = this.districts.find(
-      (district) => district.id === id
-    );
+    const findedDistrict = this.districts.find((district) => district.id === id)
 
-    return findedDistrict ?? null;
+    return findedDistrict ?? null
   }
 }
