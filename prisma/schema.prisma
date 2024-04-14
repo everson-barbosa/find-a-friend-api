@@ -106,7 +106,7 @@ model Organization {
 
     district District @relation(fields: [district_id], references: [id])
 
-    pets Pet[]?
+    pets Pet[]
 
     @@map("organizations")
 }

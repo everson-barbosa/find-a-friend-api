@@ -1,58 +1,79 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { makeRegisterPetUseCase } from '../../../use-cases/factories/make-register-pet'
 import { z } from 'zod'
-import { MININUM_NAME_LENGTH } from '../../../constants/entities/pet'
+import {
+  MININUM_NAME_LENGTH,
+  ALLOWED_PHOTO_FORMATS,
+} from '../../../constants/entities/pet'
 import { randomUUID } from 'node:crypto'
-import { writeUploadFile } from '../../../utils/write-file'
+import { saveUploadFile } from '../../../utils/save-upload-file'
+import path from 'node:path'
+import { ErrorSavingFile } from '../../../errors/saving-file'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const formData: Record<string, unknown> = {}
-
-  for await (const part of request.parts()) {
-    if (part.type === 'file') {
-      const fileBuffer = await part.toBuffer()
-
-      const fileName = `pets-${randomUUID()}`
-
-      try {
-        const { path } = await writeUploadFile({
-          fileName,
-          folder: 'pets',
-          fileBuffer,
-        })
-
-        formData.photo_url = `${path}/${fileName}`
-      } catch (error) {
-        reply.status(400).send('Error when trying to save photo')
-      }
-    }
-
-    if (part.type === 'field') {
-      const fieldName = part.fieldname
-      const fieldValue = part.value
-
-      formData[fieldName] = fieldValue
-    }
-  }
-
-  const createPetSchemaFormData = z.object({
-    name: z.string().min(MININUM_NAME_LENGTH),
-    about: z.string(),
-    age_id: z.coerce.string(),
-    size_id: z.coerce.string(),
-    energy_level_id: z.coerce.string(),
-    level_of_independence_id: z.coerce.string(),
-    environment_id: z.coerce.string(),
-    org_id: z.coerce.string(),
-    photo_url: z.string(),
-    requirements: z.string().nullable(),
+  const createPetRequestBodySchema = z.object({
+    name: z.object({ value: z.string().min(MININUM_NAME_LENGTH) }),
+    about: z.object({ value: z.string() }),
+    ageId: z.object({ value: z.string() }),
+    sizeId: z.object({ value: z.string() }),
+    energyLevelId: z.object({ value: z.string() }),
+    levelOfIndependenceId: z.object({ value: z.string() }),
+    environmentId: z.object({ value: z.string() }),
+    requirements: z.object({ value: z.string() }),
+    orgId: z.object({ value: z.string() }),
+    photo: z.object({
+      file: z.any(),
+      mimetype: z
+        .string()
+        .refine((value) => ALLOWED_PHOTO_FORMATS.includes(value), {
+          message: 'Invalid format',
+        }),
+      filename: z.string(),
+    }),
   })
 
-  const data = createPetSchemaFormData.parse(formData)
+  const {
+    name,
+    about,
+    ageId,
+    energyLevelId,
+    environmentId,
+    levelOfIndependenceId,
+    orgId,
+    requirements,
+    sizeId,
+    photo,
+  } = createPetRequestBodySchema.parse(request.body)
+
+  console.log(photo)
+
+  const photoFolder = path.join('temp', 'uploads', 'pet', 'photo')
+  const photoName = `pet-${randomUUID()}`
+
+  try {
+    await saveUploadFile({
+      fileName: photoName,
+      folder: photoFolder,
+      fileStream: photo.file,
+    })
+  } catch (error) {
+    reply.status(500).send(new ErrorSavingFile())
+  }
 
   const registerPetUseCase = makeRegisterPetUseCase()
 
-  const { pet } = await registerPetUseCase.execute(data)
+  const { pet } = await registerPetUseCase.execute({
+    name: name.value,
+    about: about.value,
+    age_id: ageId.value,
+    size_id: sizeId.value,
+    energy_level_id: energyLevelId.value,
+    environment_id: environmentId.value,
+    level_of_independence_id: levelOfIndependenceId.value,
+    org_id: orgId.value,
+    photo_url: `${photoFolder}/${photoName}`,
+    requirements: requirements.value,
+  })
 
   reply.status(201).send({ pet })
 }

@@ -9,6 +9,8 @@ app.register(cors, {
   origin: true,
 })
 
-app.register(multipart)
+app.register(multipart, {
+  attachFieldsToBody: true,
+})
 
 app.register(petsRoutes)
